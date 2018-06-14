@@ -472,7 +472,8 @@ class Palette {
     }
   }
 }
-  
+
+//class Movement  
   
 
 class Brush {
@@ -586,8 +587,8 @@ class Brush {
       a = this.alphaStroke;
     }
     this.alphaStroke = a;
-    colourStroke = stk;
-    stroke(stk);
+    this.colourStroke = color(r, g, b, a);
+    stroke(color(r, g, b, a));
   }
   
   void decAlphaBody() {
