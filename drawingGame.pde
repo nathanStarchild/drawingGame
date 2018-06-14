@@ -7,6 +7,7 @@ float dy;
 ControlFrame cf;
 Brush myBrush;
 Palette myPalette;
+Movement myMovement;
 ControlP5 cp5;
 MyColorPicker cp;
 Slider abc;
@@ -23,6 +24,8 @@ float rotRate = 1;
 boolean spiral = false;
 float spiralOffset = 1;
 boolean fadeOn = false;
+boolean movementOn = false;
+boolean curse = true;
 
 PImage tSkull;
 boolean tSkullOn = false;
@@ -50,6 +53,8 @@ void setup() {
   myBrush.setBrushSize(8, 8);
 
   myPalette = new Palette(1);
+
+  myMovement = new Movement(1);
   
   tSkull = loadImage("turtle skull.png");
   
@@ -125,6 +130,9 @@ void setup() {
 void draw() {
   
   fTime = millis()*60/1000;
+  if (movementOn) {
+    myMovement.iterate();
+  }
   if (fadeOn) {
     pushStyle();
     fill(200, 200, 200, 20);
@@ -142,12 +150,28 @@ void draw() {
       rotate(fTime * rotRate * PI/360);
     }
   
-  myBrush.fibSize(mouseX, mouseY);
+  if(myBrush.fibOn) {
+    if (movementOn) {
+      myBrush.fibSize(myMovement.getX(), myMovement.getY());
+    } else {
+      myBrush.fibSize(mouseX, mouseY);
+    }
+  }
+  
   myBrush.rainbowSequence();
+  
+  if (movementOn) {
+    iter1(myMovement.getX(), myMovement.getY());
+  }
+  
   if (mousePressed) {
     if (!((mouseX < menuX + 5) && (mouseY < menuY))) {
       if (mouseButton == LEFT) {
-        iter1(mouseX, mouseY);
+        myMovement.setXY(mouseX, mouseY);
+        myMovement.restart();
+        if (!movementOn){
+          iter1(mouseX, mouseY);
+        }
       } else {
         dx = mouseX;
         dy = mouseY;
@@ -473,7 +497,65 @@ class Palette {
   }
 }
 
-//class Movement  
+class Movement {
+  int n, startTime, t; 
+  float x, y, dx, dy;
+
+
+  Movement (int n) {
+    this.x = mouseX;
+    this.y = mouseY;
+    this.dx = 0.001;
+    this.dy = 0.001;
+    this.n = n;
+    this.restart();
+  }
+
+  void iterate() {
+    this.t = fTime - startTime; 
+    switch(this.n) {
+      case(1): // gradual increase
+        this.x = this.x + (this.dx * t);
+        this.y = this.y + (this.dy * t);
+      break;
+
+    }
+  }
+
+  void restart() {
+    this.startTime = fTime;
+  }
+
+  void setXY(int x, int y) {
+    this.x = x;
+    this.y = y;
+    this.restart();
+  }
+
+  float getX() {
+    return this.x;
+  } 
+
+  float getY() {
+    return this.y;
+  }
+
+  void incDX() {
+    this.dx = this.dx * 1.1;
+  }
+
+  void incDY() {
+    this.dy = this.dy * 1.1;
+  }
+
+  void decDX() {
+    this.dx = this.dx * 0.9;
+  }
+
+  void decDY() {
+    this.dy = this.dy * 0.9;
+  }
+}
   
 
 class Brush {
@@ -790,6 +872,9 @@ public void keyPressed() {
       cp5.getController("symmetrySlider").setValue(symmetry);
       myBrush.setBrushSize(1600, 1600);      
     break;
+   case('p'):
+     myBrush.brushSize10();
+     break;
   //  case('t'):
   //    buttonFill();
   //    cp.setColorValue(color(104,0,160,18));
@@ -849,6 +934,12 @@ public void keyPressed() {
    case('h'):
      myBrush.setFibFactor(myBrush.fibFactor-0.1);
      break;
+  case('J'):
+    myMovement.decDX();
+  break;
+  case('K'):
+    myMovement.incDX();
+  break;
      
    case('k'):
      myBrush.transparentBody();
@@ -857,6 +948,15 @@ public void keyPressed() {
      }
      break;
      
+  case('L'):
+    myMovement.decDY();
+  break;
+  case(':'):
+    myMovement.incDY();
+  break;
+   case('l'):
+     save("savedImage"+int(random(10000))+".tif");
+     break;
      
     case('z'):
       symmetry--;
@@ -866,17 +966,16 @@ public void keyPressed() {
       symmetry++;
       cp5.getController("symmetrySlider").setValue(symmetry);
       break;
-   case('p'):
-     myBrush.brushSize10();
+     case('c'):
+       curse = !curse;
+       if(!curse){
+         noCursor();
+       } else {
+         cursor(CROSS);
+       }
      break;
      
-   case('l'):
-     save("savedImage"+int(random(10000))+".tif");
-     break;
-     
-   //case('c'):
-   //  rot = !(rot);
-   //  break;
+  
      
    case('v'):
      rot1 = !(rot1);
@@ -893,6 +992,9 @@ public void keyPressed() {
    case('m'):
      rot4 = !(rot4);
      break;
+   case('M'):
+     movementOn = !(movementOn);
+   break;
      
    case(','):
      rotRate *= 0.9;
