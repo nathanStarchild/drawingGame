@@ -26,6 +26,7 @@ float spiralOffset = 1;
 boolean fadeOn = false;
 boolean movementOn = false;
 boolean curse = true;
+boolean menuOn = true;
 
 PImage tSkull;
 boolean tSkullOn = false;
@@ -54,7 +55,7 @@ void setup() {
 
   myPalette = new Palette(1);
 
-  myMovement = new Movement(1);
+  myMovement = new Movement(2);
   
   tSkull = loadImage("turtle skull.png");
   
@@ -182,51 +183,53 @@ void draw() {
   //if (frameCount % 10 == 0) {
     //saveFrame("frames002/frame#####.tga");
   //}
-  pushStyle();
-  fill(0);
-  fill(100, 100, 100);
-  rect(5, menuY, 160, 40);
-  fill(255, 255, 255);
-  textSize(10);
-  textFont(labelsFont);
-  text("f", 20, menuY - 5 + 20);
-  text("v", 40, menuY - 5 + 20);
-  text("b", 60, menuY - 5 + 20);
-  text("n", 80, menuY - 5 + 20);
-  text("m", 100, menuY - 5 + 20);
-  text("R", 120, menuY - 5 + 20);
-  text(myBrush.rainbowRate, 140, menuY - 5 + 20);
-  
-  pushStyle();
-  textFont(scalesFont);
-  textSize(14);
-  text(rotRate, 20, menuY - 5 + 40);
-  text(int(frameRate), 70, menuY - 5 + 40);
-  text(myBrush.alphaBody, 100,  menuY - 5 + 40);
-  popStyle();
-  
-  fill(255, 0, 255);
-  if(myBrush.fibOn){
+  if (menuOn) {
+    pushStyle();
+    fill(0);
+    fill(100, 100, 100);
+    rect(5, menuY, 160, 40);
+    fill(255, 255, 255);
+    textSize(10);
+    textFont(labelsFont);
     text("f", 20, menuY - 5 + 20);
-  }
-  if(rot1){
     text("v", 40, menuY - 5 + 20);
-  }
-  if(rot2){
-    text("b", 60, menuY - 5 + 20);  
-  }
-  if(rot3){
+    text("b", 60, menuY - 5 + 20);
     text("n", 80, menuY - 5 + 20);
-  }
-  if(rot4){
     text("m", 100, menuY - 5 + 20);
-  }
-  if(myBrush.rainbowOn){
     text("R", 120, menuY - 5 + 20);
     text(myBrush.rainbowRate, 140, menuY - 5 + 20);
+    
+    pushStyle();
+    textFont(scalesFont);
+    textSize(14);
+    text(rotRate, 20, menuY - 5 + 40);
+    text(int(frameRate), 70, menuY - 5 + 40);
+    text(myBrush.alphaBody, 100,  menuY - 5 + 40);
+    popStyle();
+    
+    fill(255, 0, 255);
+    if(myBrush.fibOn){
+      text("f", 20, menuY - 5 + 20);
+    }
+    if(rot1){
+      text("v", 40, menuY - 5 + 20);
+    }
+    if(rot2){
+      text("b", 60, menuY - 5 + 20);  
+    }
+    if(rot3){
+      text("n", 80, menuY - 5 + 20);
+    }
+    if(rot4){
+      text("m", 100, menuY - 5 + 20);
+    }
+    if(myBrush.rainbowOn){
+      text("R", 120, menuY - 5 + 20);
+      text(myBrush.rainbowRate, 140, menuY - 5 + 20);
+    }
+    
+    popStyle();
   }
-  
-  popStyle();
   
   
 }
@@ -335,7 +338,7 @@ public class ControlFrame extends PApplet {
       .setRange(0,1600)
       //.setNumberOfTickMarks(201)
       //.showTickMarks(false)
-      .setCaptionLabel("Size")
+      .setCaptionLabel("")
       .setValue(5);
       ;
     cp5.addSlider("symmetrySlider")
@@ -343,7 +346,7 @@ public class ControlFrame extends PApplet {
       .setPosition(menuBuff, menuBuff * 3 + buttonSize + cpHeight + slHeight)
       .setSize(menuWidth, slHeight)
       .setRange(0,72)
-      .setCaptionLabel("Symmetry")
+      .setCaptionLabel("")
       .setValue(12)
       .setNumberOfTickMarks(73)
       .showTickMarks(false)
@@ -406,15 +409,15 @@ class Palette {
   void loadScheme() {
     switch(this.n) {
       case(1)://album cover
-        this.s1 = color(0);
-        this.s2 = color(0);
-        this.s3 = color(0);
-        this.s4 = color(0);
-        this.s5 = color(0);
-        this.s6 = color(0);
-        this.s7 = color(0);
-        this.s8 = color(0);
-        this.s9 = color(0);
+        this.s1 = color(1, 1, 1);
+        this.s2 = color(1, 1, 1);
+        this.s3 = color(1, 1, 1);
+        this.s4 = color(1, 1, 1);
+        this.s5 = color(1, 1, 1);
+        this.s6 = color(1, 1, 1);
+        this.s7 = color(1, 1, 1);
+        this.s8 = color(1, 1, 1);
+        this.s9 = color(1, 1, 1);
         this.b1 = color(184, 215, 0);
         this.b2 = color(0, 181, 8);
         this.b3 = color(251, 81, 3);
@@ -424,6 +427,26 @@ class Palette {
         this.b7 = color(248, 238, 203);
         this.b8 = color(88, 206, 210);
         this.b9 = color(69, 1, 148);
+        break;
+      case(2)://invert album cover
+        this.b1 = color(1, 1, 1);
+        this.b2 = color(1, 1, 1);
+        this.b3 = color(1, 1, 1);
+        this.b4 = color(1, 1, 1);
+        this.b5 = color(1, 1, 1);
+        this.b6 = color(1, 1, 1);
+        this.b7 = color(1, 1, 1);
+        this.b8 = color(1, 1, 1);
+        this.b9 = color(1, 1, 1);
+        this.s1 = color(184, 215, 0);
+        this.s2 = color(0, 181, 8);
+        this.s3 = color(251, 81, 3);
+        this.s4 = color(251, 153, 20);
+        this.s5 = color(247, 221, 0);
+        this.s6 = color(239, 192, 114);
+        this.s7 = color(248, 238, 203);
+        this.s8 = color(88, 206, 210);
+        this.s9 = color(69, 1, 148);
         break;
       case(3):
         this.b1 = color(250, 250, 250);
@@ -517,6 +540,12 @@ class Movement {
       case(1): // gradual increase
         this.x = this.x + (this.dx * t);
         this.y = this.y + (this.dy * t);
+      break;
+      case(2): //oscilator
+        this.y = this.y + (1 * sin(this.dy * t));
+        println("t: " + t + " dy*t: " + this.dy*t + "sin(): " + sin(this.dy*t));
+      break;
+      case(3): // still
       break;
 
     }
@@ -838,34 +867,34 @@ public void keyPressed() {
     case('T'):
       tSkullOn = !tSkullOn;
     break;
-    case('I'):
-      //instaOn = !instaOn;
-      //if (instaOn){
-        //String[] fontList = PFont.list();
-        //printArray(fontList);
-        pushStyle();
-        fill(69, 1, 148);
-        textFont(instaFont);
-        textSize(87);
-        text("@starchildart", 1300, 1000);
-        text("@turtleskullmusic", 50, 1000);
-        popStyle();
-      //}
-      break;
-    case('i'):
-      //instaOn = !instaOn;
-      //if (instaOn){
-        //String[] fontList = PFont.list();
-        //printArray(fontList);
-        pushStyle();
-        fill(255);
-        textFont(instaFont);
-        textSize(87);
-        text("@starchildart", 1300, 1000);
-        text("@turtleskullmusic", 50, 1000);
-        popStyle();
-      //}
-      break;
+    //case('I'):
+    //  //instaOn = !instaOn;
+    //  //if (instaOn){
+    //    //String[] fontList = PFont.list();
+    //    //printArray(fontList);
+    //    pushStyle();
+    //    fill(69, 1, 148);
+    //    textFont(instaFont);
+    //    textSize(87);
+    //    text("@starchildart", 1300, 1000);
+    //    text("@turtleskullmusic", 50, 1000);
+    //    popStyle();
+    //  //}
+    //  break;
+    //case('i'):
+    //  //instaOn = !instaOn;
+    //  //if (instaOn){
+    //    //String[] fontList = PFont.list();
+    //    //printArray(fontList);
+    //    pushStyle();
+    //    fill(255);
+    //    textFont(instaFont);
+    //    textSize(87);
+    //    text("@starchildart", 1300, 1000);
+    //    text("@turtleskullmusic", 50, 1000);
+    //    popStyle();
+    //  //}
+    //  break;
     case('O'):
       myPalette = new Palette(3);
       symmetry = 1;
@@ -974,6 +1003,16 @@ public void keyPressed() {
          cursor(CROSS);
        }
      break;
+     case('C'):
+       menuOn = !menuOn;
+       if(!menuOn) {
+         cp5.getController("symmetrySlider").hide();
+         cp5.getController("sizeSlider").hide();
+       } else {
+         cp5.getController("symmetrySlider").show();
+         cp5.getController("sizeSlider").show();
+       }
+     break;
      
   
      
@@ -1021,6 +1060,20 @@ public void keyPressed() {
      break;
    case('$'):
      myPalette = new Palette(4);
+     break;
+   case('('):
+     myMovement = new Movement(1);
+     break;
+   case(')'):
+     myMovement = new Movement(2);
+     myMovement.dy = 0.01;
+     break;
+   case('_'):
+     myMovement = new Movement(3);
+     break;
+   case('+'):
+     myMovement.dx = -1 * myMovement.dx;
+     myMovement.dy = -1 * myMovement.dy;
      break;
      
    case(CODED):
